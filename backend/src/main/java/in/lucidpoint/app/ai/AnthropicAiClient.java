@@ -55,7 +55,16 @@ public class AnthropicAiClient implements AiClient {
                     .retrieve()
                     .body(JsonNode.class);
 
-            return response.path("content").path(0).path("text").asText();
+            // Content blocks aren't always [text] — a "thinking" block can precede the text
+            // block (seen with extended thinking enabled), so find the text block by type
+            // rather than assuming index 0. Blindly reading content[0] silently returned ""
+            // whenever thinking came first, since a thinking block has no "text" field.
+            for (JsonNode block : response.path("content")) {
+                if ("text".equals(block.path("type").asText())) {
+                    return block.path("text").asText();
+                }
+            }
+            throw new AiProviderException("The AI provider returned no text content", null);
         } catch (RestClientResponseException ex) {
             throw new AiProviderException("The AI provider returned an error: " + ex.getStatusCode(), ex);
         }
