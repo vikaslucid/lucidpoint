@@ -31,8 +31,13 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Spring Security convention: role names are prefixed with "ROLE_"
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        // Two independent axes on one principal: Role becomes "ROLE_*" (Spring Security's
+        // own convention, checked via hasRole(...)), SubscriptionTier becomes "TIER_*"
+        // (same mechanism, checked via hasAuthority('TIER_PREMIUM') — see ROADMAP.md §3.4).
+        return List.of(
+                new SimpleGrantedAuthority("ROLE_" + user.getRole().name()),
+                new SimpleGrantedAuthority("TIER_" + user.getSubscriptionTier().name())
+        );
     }
 
     @Override

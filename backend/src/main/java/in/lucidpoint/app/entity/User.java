@@ -44,6 +44,15 @@ public class User {
     @Column(nullable = false)
     private boolean enabled = true;
 
+    // Orthogonal to Role (ROADMAP.md §3.4) — an ADMIN and a LEARNER can each
+    // independently be FREE or PREMIUM. @Builder.Default so every existing
+    // User.builder() call site (AuthService, StudentService) gets FREE for
+    // free without having to be touched.
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private SubscriptionTier subscriptionTier = SubscriptionTier.FREE;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 

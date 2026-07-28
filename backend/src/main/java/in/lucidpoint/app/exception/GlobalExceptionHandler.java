@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -31,6 +33,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleBadCredentials(BadCredentialsException ex) {
         return build(HttpStatus.UNAUTHORIZED, "Invalid email or password");
+    }
+
+    // @PreAuthorize denials throw this (AuthorizationDeniedException, the newer type used by
+    // Spring Security 6's method-security AOP interceptor; AccessDeniedException is its older
+    // superclass, still thrown by some other paths) — without this handler, the catch-all below
+    // was swallowing every denied @PreAuthorize check into a 500 instead of a 403.
+    @ExceptionHandler({AuthorizationDeniedException.class, AccessDeniedException.class})
+    public ResponseEntity<Map<String, Object>> handleAccessDenied(RuntimeException ex) {
+        return build(HttpStatus.FORBIDDEN, "You don't have permission to do that");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
