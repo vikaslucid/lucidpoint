@@ -3,12 +3,15 @@ package in.lucidpoint.app.service;
 import in.lucidpoint.app.dto.ResourceRequest;
 import in.lucidpoint.app.entity.Resource;
 import in.lucidpoint.app.entity.ResourceStatus;
+import in.lucidpoint.app.entity.ResourceView;
 import in.lucidpoint.app.entity.User;
 import in.lucidpoint.app.repository.ResourceRepository;
+import in.lucidpoint.app.repository.ResourceViewRepository;
 import in.lucidpoint.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -24,6 +27,7 @@ public class ResourceService {
 
     private final ResourceRepository resourceRepository;
     private final UserRepository userRepository;
+    private final ResourceViewRepository resourceViewRepository;
 
     public Resource create(ResourceRequest request, Long authorId) {
         User author = userRepository.findById(authorId)
@@ -83,12 +87,32 @@ public class ResourceService {
     // Deliberately returns the same "not found" as a missing id rather than a 403 for a
     // draft/pending/rejected resource — an anonymous reader shouldn't learn an unpublished
     // resource exists at all, let alone read its content.
-    public Resource getPublishedById(Long id) {
+    //
+    // viewerId is null for anonymous readers (this endpoint is public) — engagement can only
+    // be attributed to a known user, so anonymous reads simply aren't tracked.
+    public Resource getPublishedById(Long id, Long viewerId) {
         Resource resource = getById(id);
         if (resource.getStatus() != ResourceStatus.PUBLISHED) {
             throw new IllegalArgumentException("Resource not found: " + id);
         }
+        if (viewerId != null) {
+            recordView(resource, viewerId);
+        }
         return resource;
+    }
+
+    private void recordView(Resource resource, Long viewerId) {
+        LocalDateTime now = LocalDateTime.now();
+        ResourceView view = resourceViewRepository.findByUserIdAndResourceId(viewerId, resource.getId())
+                .orElseGet(() -> ResourceView.builder()
+                        .user(userRepository.getReferenceById(viewerId))
+                        .resource(resource)
+                        .viewCount(0)
+                        .firstViewedAt(now)
+                        .build());
+        view.setViewCount(view.getViewCount() + 1);
+        view.setLastViewedAt(now);
+        resourceViewRepository.save(view);
     }
 
     private Resource getById(Long id) {

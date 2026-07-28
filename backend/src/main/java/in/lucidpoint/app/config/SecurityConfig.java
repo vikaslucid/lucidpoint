@@ -60,6 +60,7 @@ public class SecurityConfig {
                         // the wildcard below permits — order matters here, first match wins.
                         .requestMatchers(HttpMethod.GET, "/api/content/resources/mine").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/content/resources/pending").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/content/resources/recommended").authenticated()
                         // Free knowledge layer (ROADMAP.md §3.2): reading resources needs no login;
                         // publishing (POST) still requires auth + @PreAuthorize on the controller.
                         .requestMatchers(HttpMethod.GET, "/api/content/resources/**").permitAll()
