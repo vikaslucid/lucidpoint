@@ -1,5 +1,8 @@
 package in.lucidpoint.app.exception;
 
+import in.lucidpoint.app.ai.AiNotConfiguredException;
+import in.lucidpoint.app.ai.AiProviderException;
+import in.lucidpoint.app.ai.AiUsageLimitExceededException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -42,6 +45,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({AuthorizationDeniedException.class, AccessDeniedException.class})
     public ResponseEntity<Map<String, Object>> handleAccessDenied(RuntimeException ex) {
         return build(HttpStatus.FORBIDDEN, "You don't have permission to do that");
+    }
+
+    @ExceptionHandler(AiNotConfiguredException.class)
+    public ResponseEntity<Map<String, Object>> handleAiNotConfigured(AiNotConfiguredException ex) {
+        return build(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+    }
+
+    @ExceptionHandler(AiUsageLimitExceededException.class)
+    public ResponseEntity<Map<String, Object>> handleAiUsageLimit(AiUsageLimitExceededException ex) {
+        return build(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage());
+    }
+
+    @ExceptionHandler(AiProviderException.class)
+    public ResponseEntity<Map<String, Object>> handleAiProvider(AiProviderException ex) {
+        return build(HttpStatus.BAD_GATEWAY, ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

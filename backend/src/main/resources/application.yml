@@ -28,6 +28,14 @@ app:
     secret: ${JWT_SECRET:this-is-a-dev-only-secret-change-me-before-deploying-anywhere-real}
     expiration-ms: 86400000   # 24 hours
 
+  ai:
+    # Empty by default — AiNotConfiguredException fires a clean 503 instead of a raw HTTP
+    # failure when this isn't set, so the app runs fine locally without an Anthropic account.
+    anthropic-api-key: ${ANTHROPIC_API_KEY:}
+    model: ${AI_MODEL:claude-sonnet-5}
+    max-tokens: 1024
+    free-tier-daily-limit: 3
+
 logging:
   level:
     in.lucidpoint.app: DEBUG

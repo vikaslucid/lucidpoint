@@ -29,6 +29,7 @@ cd backend
 # Set these however you prefer (env vars, IDE run config, or a .env loader)
 export DB_HOST=localhost DB_PORT=5432 DB_NAME=lucidpoint DB_USER=postgres DB_PASSWORD=postgres
 export JWT_SECRET=replace-this-with-a-long-random-string
+export ANTHROPIC_API_KEY=sk-ant-...   # optional — omit it and AI endpoints return a clean 503 instead of crashing
 mvn spring-boot:run
 ```
 The API starts on `http://localhost:8080`. Hibernate will auto-create the tables
@@ -61,11 +62,22 @@ Opens on `http://localhost:5173`. It talks to the backend at
 
 ## What's built vs. what's next
 
-**Built (Phase 1):** Auth, Student/Class/Section/Subject management, Exam & Marks
-entry, Attendance, Performance Analytics (subject-wise averages, attendance %).
+See `ROADMAP.md` for the full picture — the mission expanded partway through
+from a school-ops tool into an AI-powered knowledge ecosystem, and that doc
+explains what changed and why.
 
-**Not built yet (Phase 2 — the "Future Features" from the original brief):**
-PTM Report Generator, AI-generated student feedback, richer Parent/Teacher
-dashboards, Question Paper Generator, AI Lesson Planner, Learning Gap Prediction,
-Career Guidance, ERP integrations. The current `AnalyticsService` is designed as
-the foundation these can build on rather than something they'd replace.
+**Built (Phase 1 — school ops):** Auth, Student/Class/Section/Subject
+management, Exam & Marks entry, Attendance, Performance Analytics
+(subject-wise averages, attendance %).
+
+**Built (Phase 2 — knowledge ecosystem foundation):** `LEARNER` role for
+platform-wide users with no school affiliation; a public `Resource` content
+domain (articles/videos/problem sets/courses, readable with no login);
+a `SubscriptionTier` (FREE/PREMIUM) entitlement scaffold; an AI service layer
+(`POST /api/ai/problem-solving/hint`) giving hints/next-steps rather than
+final answers, with FREE users capped at a few free hints/day.
+
+**Not built yet (Phase 3+):** personalization/recommendations, creator
+publishing workflow + revenue share, additional premium AI tools (study
+planner, career guidance), real billing. `AnalyticsService` is designed as
+the template personalization builds on, not something it replaces.
