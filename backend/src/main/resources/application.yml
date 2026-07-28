@@ -1,5 +1,6 @@
 server:
-  port: 8080
+  # Most hosting platforms (Railway included) inject PORT and expect the app to bind to it.
+  port: ${PORT:8080}
 
 spring:
   application:
@@ -49,5 +50,15 @@ app:
 logging:
   level:
     in.lucidpoint.app: DEBUG
-  file:
-    name: app.log
+  # Deliberately no logging.file.name — container platforms capture stdout directly, and a log
+  # file inside an ephemeral container just fills up disk with nothing reading it. If you need
+  # file logging for local debugging again, add it back temporarily (see git history).
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health # only health — not the full actuator surface (env, beans, etc.)
+  endpoint:
+    health:
+      show-details: never

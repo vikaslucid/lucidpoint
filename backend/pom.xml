@@ -54,6 +54,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Actuator: exposes /actuator/health for the hosting platform's deploy healthcheck.
+             SecurityConfig already permitAll's this path — it was referencing an endpoint that
+             didn't exist until this dependency was added. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <!-- Flyway: versioned schema migrations, replacing Hibernate's ddl-auto for anything
              beyond local dev (see application.yml — ddl-auto is now "validate", not "update"). -->
         <dependency>
