@@ -1,6 +1,7 @@
 package in.lucidpoint.app.controller;
 
 import in.lucidpoint.app.dto.ResourceRequest;
+import in.lucidpoint.app.dto.ReviewDecisionRequest;
 import in.lucidpoint.app.entity.Resource;
 import in.lucidpoint.app.security.UserPrincipal;
 import in.lucidpoint.app.service.ResourceService;
@@ -13,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * The free knowledge layer (ROADMAP.md §3.2). Reads are public — no login
- * required — since that's the whole point: free, high-quality resources
- * accessible to anyone, not gated behind a school's roster.
+ * The free knowledge layer (ROADMAP.md §3.2) plus its publishing workflow (§3.5). Public reads
+ * only ever see PUBLISHED resources — creating one starts it as a private DRAFT (see
+ * ResourceService), so "free, high-quality resources" stays true without also meaning
+ * "anything anyone posts goes instantly live with zero review."
  */
 @RestController
 @RequestMapping("/api/content/resources")
@@ -26,18 +28,48 @@ public class ResourceController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public Resource publish(@Valid @RequestBody ResourceRequest request,
-                             @AuthenticationPrincipal UserPrincipal principal) {
-        return resourceService.publish(request, principal.getId());
+    public Resource create(@Valid @RequestBody ResourceRequest request,
+                            @AuthenticationPrincipal UserPrincipal principal) {
+        return resourceService.create(request, principal.getId());
+    }
+
+    @PostMapping("/{id}/submit")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public Resource submit(@PathVariable Long id, @AuthenticationPrincipal UserPrincipal principal) {
+        return resourceService.submitForReview(id, principal.getId());
+    }
+
+    @PostMapping("/{id}/approve")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Resource approve(@PathVariable Long id) {
+        return resourceService.approve(id);
+    }
+
+    @PostMapping("/{id}/reject")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Resource reject(@PathVariable Long id, @RequestBody(required = false) ReviewDecisionRequest body) {
+        String note = body != null ? body.getReviewNote() : null;
+        return resourceService.reject(id, note);
     }
 
     @GetMapping
-    public List<Resource> listAll() {
-        return resourceService.listAll();
+    public List<Resource> listPublished() {
+        return resourceService.listPublished();
+    }
+
+    @GetMapping("/mine")
+    public List<Resource> listMine(@AuthenticationPrincipal UserPrincipal principal) {
+        return resourceService.listMine(principal.getId());
+    }
+
+    @GetMapping("/pending")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Resource> listPending() {
+        return resourceService.listPending();
     }
 
     @GetMapping("/{id}")
     public Resource getById(@PathVariable Long id) {
-        return resourceService.getById(id);
+        return resourceService.getPublishedById(id);
     }
 }

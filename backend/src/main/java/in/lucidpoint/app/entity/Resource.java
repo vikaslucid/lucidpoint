@@ -43,6 +43,15 @@ public class Resource {
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
+    // Publishing workflow (ROADMAP.md §3.5) — only PUBLISHED resources are publicly visible;
+    // see ResourceService for the state machine.
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private ResourceStatus status = ResourceStatus.DRAFT;
+
+    private String reviewNote; // set by a reviewer on rejection; cleared on resubmission
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
