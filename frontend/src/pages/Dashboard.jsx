@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Navbar from "../components/Navbar";
 
@@ -28,10 +29,21 @@ export default function Dashboard() {
         {user.role === "PARENT" && (
           <p>Track your child's academic performance and attendance.</p>
         )}
+        {user.role === "LEARNER" && (
+          <p>No school needed — browse free resources and use the AI tools below whenever you want to learn something.</p>
+        )}
 
-        <p className="hint">
-          Tip: visit <code>/performance/&lt;studentId&gt;</code> to see the analytics dashboard for a specific student.
-        </p>
+        <div className="dashboard-links">
+          <Link to="/resources">Browse Resources &rarr;</Link>
+          <Link to="/ai/problem-solving">Problem-Solving Companion &rarr;</Link>
+          <Link to="/ai/study-planner">Study Planner (Premium) &rarr;</Link>
+        </div>
+
+        {user.role !== "LEARNER" && (
+          <p className="hint">
+            Tip: visit <code>/performance/&lt;studentId&gt;</code> to see the analytics dashboard for a specific student.
+          </p>
+        )}
       </div>
     </>
   );

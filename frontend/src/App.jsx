@@ -5,6 +5,13 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import StudentPerformance from "./pages/StudentPerformance";
+import Resources from "./pages/Resources";
+import ResourceDetail from "./pages/ResourceDetail";
+import CreateResource from "./pages/CreateResource";
+import MyResources from "./pages/MyResources";
+import PendingReview from "./pages/PendingReview";
+import ProblemSolvingCompanion from "./pages/ProblemSolvingCompanion";
+import StudyPlanner from "./pages/StudyPlanner";
 import "./App.css";
 
 /**
@@ -33,6 +40,52 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <StudentPerformance />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Free knowledge layer (ROADMAP.md §3.2) — public, matching the API underneath it */}
+          <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/:id" element={<ResourceDetail />} />
+
+          <Route
+            path="/resources/new"
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN", "TEACHER"]}>
+                <CreateResource />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/resources/mine"
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN", "TEACHER"]}>
+                <MyResources />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/resources/pending"
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN"]}>
+                <PendingReview />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/ai/problem-solving"
+            element={
+              <ProtectedRoute>
+                <ProblemSolvingCompanion />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ai/study-planner"
+            element={
+              <ProtectedRoute>
+                <StudyPlanner />
               </ProtectedRoute>
             }
           />
