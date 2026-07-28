@@ -13,14 +13,24 @@ spring:
 
   jpa:
     hibernate:
-      # "update" auto-creates/alters tables from entities while developing.
-      # Switch to "validate" once you introduce Flyway/Liquibase migrations for production.
-      ddl-auto: update
+      # Flyway now owns the schema (see migrations in db/migration/) — Hibernate just checks
+      # entities match what's actually there and fails fast at startup if they've drifted,
+      # rather than silently altering a live database the way "update" did.
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    # This app's dev database already has this exact schema (it evolved via ddl-auto: update
+    # before Flyway was introduced) — baseline-on-migrate tells Flyway "treat this database as
+    # already being at baseline-version, don't try to re-run V1 against tables that already
+    # exist." A fresh database (a new environment, production) has nothing to baseline against,
+    # so Flyway just runs V1 normally there.
+    baseline-on-migrate: true
+    baseline-version: 1
 
 app:
   jwt:

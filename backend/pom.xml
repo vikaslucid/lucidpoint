@@ -54,6 +54,17 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Flyway: versioned schema migrations, replacing Hibernate's ddl-auto for anything
+             beyond local dev (see application.yml — ddl-auto is now "validate", not "update"). -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+
         <!-- Lets Jackson serialize un-initialized Hibernate lazy proxies (entities are
              returned directly from controllers here, so this comes up on every relation). -->
         <dependency>

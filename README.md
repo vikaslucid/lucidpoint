@@ -32,8 +32,10 @@ export JWT_SECRET=replace-this-with-a-long-random-string
 export ANTHROPIC_API_KEY=sk-ant-...   # optional — omit it and AI endpoints return a clean 503 instead of crashing
 mvn spring-boot:run
 ```
-The API starts on `http://localhost:8080`. Hibernate will auto-create the tables
-on first run (`ddl-auto: update` in `application.yml`).
+The API starts on `http://localhost:8080`. Flyway creates the schema on first run
+from the migrations in `backend/src/main/resources/db/migration/` — Hibernate no
+longer auto-creates/alters tables (`ddl-auto: validate` in `application.yml`);
+schema changes go through a new versioned migration file from here on.
 
 > Note: this backend was written and organized here, but not compiled in this
 > environment (no Maven Central access in this sandbox). Run `mvn compile` locally
