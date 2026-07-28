@@ -74,9 +74,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // In production, replace "*" with your actual frontend origin(s), e.g. https://lucidpoint.in
-        // 192.168.1.6:5173 added for LAN access (e.g. viewing the dev server from a phone).
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://192.168.1.6:5173", "https://lucidpoint.in"));
+        // https://frontend-three-rho-27.vercel.app is the real, deployed production frontend
+        // (Vercel project "lucid8/frontend") — everything else here is local dev.
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:5173",
+                "http://192.168.1.6:5173",
+                "https://lucidpoint.in",
+                "https://frontend-three-rho-27.vercel.app"
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
