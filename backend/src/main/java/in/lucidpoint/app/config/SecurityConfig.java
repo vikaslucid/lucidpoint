@@ -74,12 +74,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // https://frontend-three-rho-27.vercel.app is the real, deployed production frontend
-        // (Vercel project "lucid8/frontend") — everything else here is local dev.
+        // lucidpoint.in / www.lucidpoint.in is the real custom domain (Vercel, DNS via
+        // Hostinger's DNS zone editor) — frontend-three-rho-27.vercel.app is the underlying
+        // Vercel deployment URL, kept as a fallback. Everything else here is local dev.
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
                 "http://192.168.1.6:5173",
                 "https://lucidpoint.in",
+                "https://www.lucidpoint.in",
                 "https://frontend-three-rho-27.vercel.app"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
