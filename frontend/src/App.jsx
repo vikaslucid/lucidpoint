@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -15,6 +16,16 @@ import StudyPlanner from "./pages/StudyPlanner";
 import "./App.css";
 
 /**
+ * "/" is the public landing page. A logged-in user hitting it is sent straight
+ * to /dashboard instead of seeing marketing copy for a product they're already
+ * inside of; everyone else sees Landing.
+ */
+function Home() {
+  const { user } = useAuth();
+  return user ? <Navigate to="/dashboard" replace /> : <Landing />;
+}
+
+/**
  * Route map for the whole app. AuthProvider wraps everything so any page can
  * call useAuth(). ProtectedRoute redirects to /login if there's no logged-in user.
  */
@@ -23,11 +34,12 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           <Route
-            path="/"
+            path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
