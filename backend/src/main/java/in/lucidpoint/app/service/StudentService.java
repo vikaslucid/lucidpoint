@@ -8,6 +8,7 @@ import in.lucidpoint.app.repository.SectionRepository;
 import in.lucidpoint.app.repository.StudentRepository;
 import in.lucidpoint.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,8 +55,26 @@ public class StudentService {
         return studentRepository.findBySectionId(sectionId);
     }
 
-    public Student getById(Long studentId) {
-        return studentRepository.findById(studentId)
+    /**
+     * A student's own record and performance are personal data — ADMIN/TEACHER can look up
+     * any student, but a STUDENT or PARENT account may only fetch their own/their child's.
+     * Without this, /api/students/{id} and /api/analytics/student/{id} let any authenticated
+     * user read any other student's grades and attendance just by guessing an ID.
+     */
+    public Student getById(Long studentId, User requester) {
+        Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
+        requireViewAccess(student, requester);
+        return student;
+    }
+
+    public void requireViewAccess(Student student, User requester) {
+        boolean isStaff = requester.getRole() == Role.ADMIN || requester.getRole() == Role.TEACHER;
+        boolean isSelf = student.getUser().getId().equals(requester.getId());
+        boolean isParent = student.getParent() != null && student.getParent().getId().equals(requester.getId());
+
+        if (!(isStaff || isSelf || isParent)) {
+            throw new AccessDeniedException("You don't have permission to view this student");
+        }
     }
 }
