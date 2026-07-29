@@ -5,9 +5,9 @@ import in.lucidpoint.app.dto.StudentPerformanceResponse.SubjectScore;
 import in.lucidpoint.app.entity.Attendance;
 import in.lucidpoint.app.entity.Mark;
 import in.lucidpoint.app.entity.Student;
+import in.lucidpoint.app.entity.User;
 import in.lucidpoint.app.repository.AttendanceRepository;
 import in.lucidpoint.app.repository.MarkRepository;
-import in.lucidpoint.app.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +28,12 @@ public class AnalyticsService {
 
     private final MarkRepository markRepository;
     private final AttendanceRepository attendanceRepository;
-    private final StudentRepository studentRepository;
+    private final StudentService studentService;
 
-    public StudentPerformanceResponse getStudentPerformance(Long studentId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new IllegalArgumentException("Student not found: " + studentId));
+    // studentService.getById enforces that only staff (ADMIN/TEACHER) or the student
+    // themself/their linked parent can view this student's marks and attendance.
+    public StudentPerformanceResponse getStudentPerformance(Long studentId, User requester) {
+        Student student = studentService.getById(studentId, requester);
 
         List<Mark> marks = markRepository.findByStudentId(studentId);
 
