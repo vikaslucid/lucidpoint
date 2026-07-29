@@ -13,7 +13,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-left">
-        <Link to="/" className="brand">LucidPoint</Link>
+        <Link to={user ? "/dashboard" : "/"} className="brand">LucidPoint</Link>
         <Link to="/resources">Resources</Link>
         {user && (
           <>
