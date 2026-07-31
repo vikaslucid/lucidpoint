@@ -266,6 +266,224 @@
   margin: 16px 0 40px;
 }
 
+/* ---------- Landing page redesign: full-bleed sections, not boxed into .page ---------- */
+.landing-hero {
+  background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 55%, #4f46e5 100%);
+  color: white;
+  padding: 72px 24px 88px;
+}
+
+.landing-hero-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.landing-eyebrow {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.landing-hero h1 {
+  font-size: 2.6rem;
+  line-height: 1.15;
+  margin: 0 0 16px;
+  font-weight: 800;
+  color: white;
+}
+
+.landing-hero .hero-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1.1rem;
+  max-width: 480px;
+  margin: 0 0 28px;
+  text-align: left;
+}
+
+.landing-hero .hero-cta {
+  justify-content: flex-start;
+}
+
+.landing-hero .button-link {
+  background: white;
+  color: #4338ca;
+}
+
+.landing-hero .button-link-outline {
+  background: transparent;
+  color: white;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.landing-trust {
+  margin: 16px 0 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.landing-demo {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.landing-demo-problem {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 14px;
+}
+
+.landing-demo-problem strong {
+  color: white;
+  display: block;
+  font-size: 1rem;
+  margin-top: 4px;
+}
+
+.landing-demo-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.landing-demo-bubble {
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.landing-demo-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.landing-demo-bubble.generic {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.landing-demo-bubble.generic .landing-demo-label {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.landing-demo-bubble.lucid {
+  background: rgba(255, 255, 255, 0.95);
+  color: #1e1b4b;
+}
+
+.landing-demo-bubble.lucid .landing-demo-label {
+  color: #4f46e5;
+}
+
+.landing-mission {
+  padding: 64px 24px;
+  background: #f9fafb;
+}
+
+.landing-mission-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.landing-mission h2 {
+  font-size: 1.75rem;
+  margin: 0 0 16px;
+  color: #111827;
+}
+
+.landing-mission p {
+  color: #4b5563;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.landing-pillars {
+  padding: 64px 24px;
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.landing-pillars h2 {
+  text-align: center;
+  font-size: 1.75rem;
+  margin: 0 0 32px;
+  color: #111827;
+}
+
+.landing-pillar-index {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4f46e5;
+  background: #eef2ff;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.landing-cta-band {
+  background: #111827;
+  color: white;
+  text-align: center;
+  padding: 64px 24px;
+}
+
+.landing-cta-band h2 {
+  font-size: 1.75rem;
+  margin: 0 0 12px;
+  color: white;
+}
+
+.landing-cta-band p {
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 28px;
+}
+
+.landing-cta-band .hero-cta {
+  justify-content: center;
+}
+
+.landing-signin {
+  text-align: center;
+  padding: 28px 24px;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 860px) {
+  .landing-hero-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .landing-hero .hero-subtitle {
+    text-align: center;
+    margin: 0 auto 28px;
+  }
+
+  .landing-hero .hero-cta {
+    justify-content: center;
+  }
+}
+
 .feature-card {
   background: #f9fafb;
   border: 1px solid #e5e7eb;
