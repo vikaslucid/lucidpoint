@@ -15,13 +15,21 @@ export default function Resources() {
   const [resources, setResources] = useState(null);
   const [recommended, setRecommended] = useState(null);
   const [error, setError] = useState("");
+  const [gradeFilter, setGradeFilter] = useState("");
+  const [subjectFilter, setSubjectFilter] = useState("");
 
   useEffect(() => {
+    const params = {};
+    if (gradeFilter) params.grade = gradeFilter;
+    if (subjectFilter) params.subject = subjectFilter;
+
     apiClient
-      .get("/content/resources")
+      .get("/content/resources", { params })
       .then((res) => setResources(res.data))
       .catch(() => setError("Could not load resources."));
+  }, [gradeFilter, subjectFilter]);
 
+  useEffect(() => {
     if (user) {
       apiClient
         .get("/content/resources/recommended")
@@ -42,6 +50,26 @@ export default function Resources() {
         </div>
 
         {error && <div className="error-banner">{error}</div>}
+
+        <div className="resource-filters">
+          <label>
+            Grade
+            <select value={gradeFilter} onChange={(e) => setGradeFilter(e.target.value)}>
+              <option value="">All</option>
+              {Array.from({ length: 12 }, (_, i) => i + 1).map((g) => (
+                <option key={g} value={g}>{g}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Subject
+            <input
+              value={subjectFilter}
+              onChange={(e) => setSubjectFilter(e.target.value)}
+              placeholder="e.g. Mathematics"
+            />
+          </label>
+        </div>
 
         {recommended && recommended.length > 0 && (
           <section>

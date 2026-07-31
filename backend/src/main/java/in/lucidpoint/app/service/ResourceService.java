@@ -39,6 +39,9 @@ public class ResourceService {
                 .summary(request.getSummary())
                 .body(request.getBody())
                 .externalUrl(request.getExternalUrl())
+                .grade(request.getGrade())
+                .subject(request.getSubject())
+                .sourceYear(request.getSourceYear())
                 .author(author)
                 .build(); // status defaults to DRAFT
 
@@ -72,7 +75,19 @@ public class ResourceService {
         return resourceRepository.save(resource);
     }
 
-    public List<Resource> listPublished() {
+    // grade/subject are optional filters (null = no filter on that dimension) — kept as plain
+    // branching rather than a Specification/query-builder abstraction, since two optional
+    // dimensions is still simple enough not to need one.
+    public List<Resource> listPublished(Integer grade, String subject) {
+        if (grade != null && subject != null) {
+            return resourceRepository.findByStatusAndGradeAndSubject(ResourceStatus.PUBLISHED, grade, subject);
+        }
+        if (grade != null) {
+            return resourceRepository.findByStatusAndGrade(ResourceStatus.PUBLISHED, grade);
+        }
+        if (subject != null) {
+            return resourceRepository.findByStatusAndSubject(ResourceStatus.PUBLISHED, subject);
+        }
         return resourceRepository.findByStatus(ResourceStatus.PUBLISHED);
     }
 

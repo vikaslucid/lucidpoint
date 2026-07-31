@@ -55,8 +55,9 @@ public class ResourceController {
     }
 
     @GetMapping
-    public List<Resource> listPublished() {
-        return resourceService.listPublished();
+    public List<Resource> listPublished(@RequestParam(required = false) Integer grade,
+                                         @RequestParam(required = false) String subject) {
+        return resourceService.listPublished(grade, subject);
     }
 
     @GetMapping("/mine")

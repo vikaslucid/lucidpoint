@@ -22,4 +22,8 @@ public class ResourceRequest {
     private String body;
 
     private String externalUrl; // optional
+
+    private Integer grade; // optional
+    private String subject; // optional
+    private Integer sourceYear; // optional
 }

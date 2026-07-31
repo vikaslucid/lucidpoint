@@ -9,6 +9,9 @@ export default function CreateResource() {
   const [summary, setSummary] = useState("");
   const [body, setBody] = useState("");
   const [externalUrl, setExternalUrl] = useState("");
+  const [grade, setGrade] = useState("");
+  const [subject, setSubject] = useState("");
+  const [sourceYear, setSourceYear] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +27,9 @@ export default function CreateResource() {
         summary,
         body,
         externalUrl: externalUrl || null,
+        grade: grade ? Number(grade) : null,
+        subject: subject || null,
+        sourceYear: sourceYear ? Number(sourceYear) : null,
       });
       navigate("/resources/mine");
     } catch (err) {
@@ -72,6 +78,23 @@ export default function CreateResource() {
             External link (optional — for videos/hosted courses)
             <input value={externalUrl} onChange={(e) => setExternalUrl(e.target.value)} />
           </label>
+
+          <div className="form-row">
+            <label>
+              Grade (optional)
+              <input type="number" min="1" max="12" value={grade} onChange={(e) => setGrade(e.target.value)} />
+            </label>
+
+            <label>
+              Subject (optional)
+              <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder="e.g. Mathematics" />
+            </label>
+
+            <label>
+              Source year (optional)
+              <input type="number" value={sourceYear} onChange={(e) => setSourceYear(e.target.value)} placeholder="e.g. 2019" />
+            </label>
+          </div>
 
           <button type="submit" disabled={loading}>
             {loading ? "Saving..." : "Save draft"}

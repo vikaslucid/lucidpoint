@@ -21,6 +21,9 @@ export default function ResourceCard({ resource, extra }) {
     <div className="resource-card">
       <div className="resource-card-header">
         <span className="badge badge-type">{resource.type.replace("_", " ")}</span>
+        {resource.grade && <span className="badge badge-meta">Grade {resource.grade}</span>}
+        {resource.subject && <span className="badge badge-meta">{resource.subject}</span>}
+        {resource.sourceYear && <span className="badge badge-meta">{resource.sourceYear}</span>}
         {resource.status && resource.status !== "PUBLISHED" && <StatusBadge status={resource.status} />}
       </div>
       <h4>
