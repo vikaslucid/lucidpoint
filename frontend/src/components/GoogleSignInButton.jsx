@@ -4,6 +4,12 @@ import { useAuth } from "../context/AuthContext";
 
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
+// Module-level, not component state: google.accounts.id is a global singleton, so it should
+// only ever be initialized once regardless of how many times this component mounts (React 18
+// StrictMode deliberately double-invokes effects in dev, which was calling initialize() twice
+// and triggering the SDK's own "called multiple times" warning).
+let googleSdkInitialized = false;
+
 // Exported so pages can skip rendering an "or" divider above a button that isn't there.
 export const isGoogleSignInEnabled = Boolean(CLIENT_ID);
 
@@ -34,10 +40,13 @@ export default function GoogleSignInButton() {
     if (!CLIENT_ID) return;
 
     function render() {
-      window.google.accounts.id.initialize({
-        client_id: CLIENT_ID,
-        callback: (response) => handlerRef.current(response),
-      });
+      if (!googleSdkInitialized) {
+        window.google.accounts.id.initialize({
+          client_id: CLIENT_ID,
+          callback: (response) => handlerRef.current(response),
+        });
+        googleSdkInitialized = true;
+      }
       window.google.accounts.id.renderButton(buttonRef.current, {
         theme: "outline",
         size: "large",
