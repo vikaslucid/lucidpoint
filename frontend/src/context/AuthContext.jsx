@@ -24,6 +24,11 @@ export function AuthProvider({ children }) {
     persistSession(data);
   }
 
+  async function loginWithGoogle(idToken) {
+    const { data } = await apiClient.post("/auth/google", { idToken });
+    persistSession(data);
+  }
+
   function persistSession(authResponse) {
     const { token, email, role, fullName } = authResponse;
     localStorage.setItem("lucidpoint_token", token);
@@ -39,7 +44,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

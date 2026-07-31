@@ -3,6 +3,8 @@ package in.lucidpoint.app.exception;
 import in.lucidpoint.app.ai.AiNotConfiguredException;
 import in.lucidpoint.app.ai.AiProviderException;
 import in.lucidpoint.app.ai.AiUsageLimitExceededException;
+import in.lucidpoint.app.email.EmailNotConfiguredException;
+import in.lucidpoint.app.email.EmailProviderException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -59,6 +61,21 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AiProviderException.class)
     public ResponseEntity<Map<String, Object>> handleAiProvider(AiProviderException ex) {
+        return build(HttpStatus.BAD_GATEWAY, ex.getMessage());
+    }
+
+    @ExceptionHandler(GoogleAuthNotConfiguredException.class)
+    public ResponseEntity<Map<String, Object>> handleGoogleAuthNotConfigured(GoogleAuthNotConfiguredException ex) {
+        return build(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailNotConfiguredException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailNotConfigured(EmailNotConfiguredException ex) {
+        return build(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailProviderException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailProvider(EmailProviderException ex) {
         return build(HttpStatus.BAD_GATEWAY, ex.getMessage());
     }
 

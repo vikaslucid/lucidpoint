@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import GoogleSignInButton, { isGoogleSignInEnabled } from "../components/GoogleSignInButton";
 
 export default function Register() {
   const [fullName, setFullName] = useState("");
@@ -28,46 +29,55 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-      <form className="auth-card" onSubmit={handleSubmit}>
+      <div className="auth-card">
         <h1>LucidPoint</h1>
         <p className="subtitle">Create your account</p>
 
-        {error && <div className="error-banner">{error}</div>}
+        {isGoogleSignInEnabled && (
+          <>
+            <GoogleSignInButton />
+            <div className="auth-divider"><span>or</span></div>
+          </>
+        )}
 
-        <label>
-          Full name
-          <input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
-        </label>
+        <form onSubmit={handleSubmit}>
+          {error && <div className="error-banner">{error}</div>}
 
-        <label>
-          Email
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </label>
+          <label>
+            Full name
+            <input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+          </label>
 
-        <label>
-          Password
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
-        </label>
+          <label>
+            Email
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </label>
 
-        <label>
-          Role
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="LEARNER">Lifelong Learner (no school)</option>
-            <option value="ADMIN">Admin</option>
-            <option value="TEACHER">Teacher</option>
-            <option value="STUDENT">Student</option>
-            <option value="PARENT">Parent</option>
-          </select>
-        </label>
+          <label>
+            Password
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+          </label>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating account..." : "Create account"}
-        </button>
+          <label>
+            Role
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="LEARNER">Lifelong Learner (no school)</option>
+              <option value="ADMIN">Admin</option>
+              <option value="TEACHER">Teacher</option>
+              <option value="STUDENT">Student</option>
+              <option value="PARENT">Parent</option>
+            </select>
+          </label>
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Creating account..." : "Create account"}
+          </button>
+        </form>
 
         <p className="switch-link">
           Already have an account? <Link to="/login">Sign in</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 }

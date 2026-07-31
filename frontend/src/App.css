@@ -137,6 +137,45 @@
   cursor: not-allowed;
 }
 
+.google-signin {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  color: #9ca3af;
+  font-size: 0.85rem;
+  margin: 20px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.auth-divider span {
+  padding: 0 12px;
+}
+
+.forgot-link {
+  text-align: right;
+  margin: -8px 0 16px;
+}
+
+.forgot-link a {
+  font-size: 0.85rem;
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.forgot-link a:hover {
+  text-decoration: underline;
+}
+
 .switch-link {
   text-align: center;
   margin-top: 16px;

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import GoogleSignInButton, { isGoogleSignInEnabled } from "../components/GoogleSignInButton";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -26,30 +27,43 @@ export default function Login() {
 
   return (
     <div className="auth-page">
-      <form className="auth-card" onSubmit={handleSubmit}>
+      <div className="auth-card">
         <h1>LucidPoint</h1>
         <p className="subtitle">Sign in to your dashboard</p>
 
-        {error && <div className="error-banner">{error}</div>}
+        {isGoogleSignInEnabled && (
+          <>
+            <GoogleSignInButton />
+            <div className="auth-divider"><span>or</span></div>
+          </>
+        )}
 
-        <label>
-          Email
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </label>
+        <form onSubmit={handleSubmit}>
+          {error && <div className="error-banner">{error}</div>}
 
-        <label>
-          Password
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        </label>
+          <label>
+            Email
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </label>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Signing in..." : "Sign in"}
-        </button>
+          <label>
+            Password
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </label>
+
+          <p className="forgot-link">
+            <Link to="/forgot-password">Forgot password?</Link>
+          </p>
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Signing in..." : "Sign in"}
+          </button>
+        </form>
 
         <p className="switch-link">
           New here? <Link to="/register">Create an account</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 }
