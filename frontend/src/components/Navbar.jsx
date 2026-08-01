@@ -18,6 +18,7 @@ export default function Navbar() {
           LucidPoint
         </Link>
         <Link to="/resources">Resources</Link>
+        <Link to="/lessons">Lessons</Link>
         {user && (
           <>
             <Link to="/ai/problem-solving">AI Hint</Link>

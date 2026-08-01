@@ -11,6 +11,9 @@ import StudentPerformance from "./pages/StudentPerformance";
 import Resources from "./pages/Resources";
 import ResourceDetail from "./pages/ResourceDetail";
 import CreateResource from "./pages/CreateResource";
+import Lessons from "./pages/Lessons";
+import LessonView from "./pages/LessonView";
+import CreateLesson from "./pages/CreateLesson";
 import MyResources from "./pages/MyResources";
 import PendingReview from "./pages/PendingReview";
 import ProblemSolvingCompanion from "./pages/ProblemSolvingCompanion";
@@ -85,6 +88,18 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={["ADMIN"]}>
                 <PendingReview />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Lessons: concept + a few guided questions, walked through one at a time */}
+          <Route path="/lessons" element={<Lessons />} />
+          <Route path="/lessons/:id" element={<LessonView />} />
+          <Route
+            path="/lessons/new"
+            element={
+              <ProtectedRoute allowedRoles={["ADMIN", "TEACHER"]}>
+                <CreateLesson />
               </ProtectedRoute>
             }
           />

@@ -64,6 +64,10 @@ public class SecurityConfig {
                         // Free knowledge layer (ROADMAP.md §3.2): reading resources needs no login;
                         // publishing (POST) still requires auth + @PreAuthorize on the controller.
                         .requestMatchers(HttpMethod.GET, "/api/content/resources/**").permitAll()
+                        // Lessons: same public-read/authenticated-write shape as resources above.
+                        .requestMatchers(HttpMethod.GET, "/api/content/lessons/mine").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/content/lessons/pending").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/content/lessons/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
