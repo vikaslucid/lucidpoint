@@ -120,6 +120,9 @@ export default function LessonView() {
             <p className="lesson-progress">
               {TIERS.find((t) => t.key === tier).label} — Question {step + 1} of {questions.length}
             </p>
+            {question.diagramSvg && (
+              <div className="lesson-diagram" dangerouslySetInnerHTML={{ __html: question.diagramSvg }} />
+            )}
             <p className="lesson-prompt">{question.prompt}</p>
 
             {question.hint && !answered && (

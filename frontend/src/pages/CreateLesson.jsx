@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "../api/client";
 import Navbar from "../components/Navbar";
 
-const BLANK_QUESTION = { prompt: "", difficulty: "BEGINNER", options: "", correctAnswer: "", hint: "", explanation: "" };
+const BLANK_QUESTION = { prompt: "", diagramSvg: "", difficulty: "BEGINNER", options: "", correctAnswer: "", hint: "", explanation: "" };
 
 export default function CreateLesson() {
   const [title, setTitle] = useState("");
@@ -43,6 +43,7 @@ export default function CreateLesson() {
         sourceYear: sourceYear ? Number(sourceYear) : null,
         questions: questions.map((q) => ({
           prompt: q.prompt,
+          diagramSvg: q.diagramSvg || null,
           difficulty: q.difficulty,
           options: q.options ? q.options.split("\n").map((o) => o.trim()).filter(Boolean) : [],
           correctAnswer: q.correctAnswer,
@@ -119,6 +120,11 @@ export default function CreateLesson() {
                   <option value="INTERMEDIATE">Intermediate</option>
                   <option value="ADVANCED">Advanced</option>
                 </select>
+              </label>
+              <label>
+                Diagram (optional — inline SVG markup, shown above the prompt)
+                <textarea rows={3} value={q.diagramSvg} onChange={(e) => updateQuestion(i, "diagramSvg", e.target.value)}
+                  placeholder="<svg viewBox='0 0 200 100'>...</svg>" />
               </label>
               <label>
                 Options (one per line — leave blank for a free-response question)

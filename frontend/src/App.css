@@ -969,6 +969,20 @@
   margin-bottom: 16px;
 }
 
+.lesson-diagram {
+  display: flex;
+  justify-content: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.lesson-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
 .lesson-tier-picker {
   display: flex;
   gap: 12px;

@@ -12,6 +12,8 @@ public class LessonQuestionRequest {
     @NotBlank
     private String prompt;
 
+    private String diagramSvg; // optional — inline SVG markup shown above the prompt
+
     // BEGINNER, INTERMEDIATE, or ADVANCED — defaults to BEGINNER if omitted (see LessonService).
     private String difficulty;
 

@@ -40,6 +40,13 @@ public class LessonQuestion {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String prompt;
 
+    // Optional inline SVG markup shown above the prompt — for questions where a diagram
+    // (a trajectory, a coordinate grid, particle positions, a circuit) genuinely helps rather
+    // than being described awkwardly in text. Authored inline (not an uploaded image) since
+    // these are simple schematic drawings, not photos.
+    @Column(columnDefinition = "TEXT")
+    private String diagramSvg;
+
     // Multiple-choice options, in order. Empty for a free-response question.
     @ElementCollection
     @CollectionTable(name = "lesson_question_options", joinColumns = @JoinColumn(name = "lesson_question_id"))
