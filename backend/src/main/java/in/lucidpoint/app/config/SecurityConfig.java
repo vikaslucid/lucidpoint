@@ -67,6 +67,9 @@ public class SecurityConfig {
                         // Lessons: same public-read/authenticated-write shape as resources above.
                         .requestMatchers(HttpMethod.GET, "/api/content/lessons/mine").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/content/lessons/pending").authenticated()
+                        // The "My Activity" log (ties into points/LessonAttempt) — must come before
+                        // the GET wildcard below, or it'd fall under the public permitAll rule.
+                        .requestMatchers(HttpMethod.GET, "/api/content/lessons/attempts/mine").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/content/lessons/**").permitAll()
                         .anyRequest().authenticated()
                 )

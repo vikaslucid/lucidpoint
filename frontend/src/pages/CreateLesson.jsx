@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import apiClient from "../api/client";
 import Navbar from "../components/Navbar";
 
-const BLANK_QUESTION = { prompt: "", options: "", correctAnswer: "", hint: "", explanation: "" };
+const BLANK_QUESTION = { prompt: "", difficulty: "BEGINNER", options: "", correctAnswer: "", hint: "", explanation: "" };
 
 export default function CreateLesson() {
   const [title, setTitle] = useState("");
@@ -43,6 +43,7 @@ export default function CreateLesson() {
         sourceYear: sourceYear ? Number(sourceYear) : null,
         questions: questions.map((q) => ({
           prompt: q.prompt,
+          difficulty: q.difficulty,
           options: q.options ? q.options.split("\n").map((o) => o.trim()).filter(Boolean) : [],
           correctAnswer: q.correctAnswer,
           hint: q.hint || null,
@@ -110,6 +111,14 @@ export default function CreateLesson() {
               <label>
                 Prompt
                 <textarea rows={2} value={q.prompt} onChange={(e) => updateQuestion(i, "prompt", e.target.value)} required />
+              </label>
+              <label>
+                Difficulty
+                <select value={q.difficulty} onChange={(e) => updateQuestion(i, "difficulty", e.target.value)}>
+                  <option value="BEGINNER">Beginner</option>
+                  <option value="INTERMEDIATE">Intermediate</option>
+                  <option value="ADVANCED">Advanced</option>
+                </select>
               </label>
               <label>
                 Options (one per line — leave blank for a free-response question)

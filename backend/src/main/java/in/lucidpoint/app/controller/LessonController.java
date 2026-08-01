@@ -1,8 +1,12 @@
 package in.lucidpoint.app.controller;
 
+import in.lucidpoint.app.dto.AttemptRequest;
+import in.lucidpoint.app.dto.AttemptResponse;
+import in.lucidpoint.app.dto.LessonQuestionRequest;
 import in.lucidpoint.app.dto.LessonRequest;
 import in.lucidpoint.app.dto.ReviewDecisionRequest;
 import in.lucidpoint.app.entity.Lesson;
+import in.lucidpoint.app.entity.LessonAttempt;
 import in.lucidpoint.app.security.UserPrincipal;
 import in.lucidpoint.app.service.LessonService;
 import jakarta.validation.Valid;
@@ -70,5 +74,28 @@ public class LessonController {
     @GetMapping("/{id}")
     public Lesson getById(@PathVariable Long id) {
         return lessonService.getPublishedById(id);
+    }
+
+    // Adds more questions to an existing lesson (e.g. expanding to 30 questions across three
+    // difficulty tiers) without disturbing the existing ones or their attempt history.
+    @PostMapping("/{id}/questions")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public Lesson appendQuestions(@PathVariable Long id, @RequestBody List<LessonQuestionRequest> questions,
+                                   @AuthenticationPrincipal UserPrincipal principal) {
+        return lessonService.appendQuestions(id, questions, principal.getId());
+    }
+
+    // Grades the answer server-side, logs it, and awards points if correct (see LessonService).
+    @PostMapping("/{lessonId}/questions/{questionId}/attempt")
+    public AttemptResponse attempt(@PathVariable Long lessonId, @PathVariable Long questionId,
+                                    @RequestBody AttemptRequest request,
+                                    @AuthenticationPrincipal UserPrincipal principal) {
+        return lessonService.recordAttempt(lessonId, questionId, request, principal.getId());
+    }
+
+    // The "My Activity" log — every question a student has attempted, most recent first.
+    @GetMapping("/attempts/mine")
+    public List<LessonAttempt> myAttempts(@AuthenticationPrincipal UserPrincipal principal) {
+        return lessonService.listMyAttempts(principal.getId());
     }
 }

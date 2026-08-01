@@ -14,6 +14,7 @@ import CreateResource from "./pages/CreateResource";
 import Lessons from "./pages/Lessons";
 import LessonView from "./pages/LessonView";
 import CreateLesson from "./pages/CreateLesson";
+import MyActivity from "./pages/MyActivity";
 import MyResources from "./pages/MyResources";
 import PendingReview from "./pages/PendingReview";
 import ProblemSolvingCompanion from "./pages/ProblemSolvingCompanion";
@@ -100,6 +101,14 @@ export default function App() {
             element={
               <ProtectedRoute allowedRoles={["ADMIN", "TEACHER"]}>
                 <CreateLesson />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/activity"
+            element={
+              <ProtectedRoute>
+                <MyActivity />
               </ProtectedRoute>
             }
           />

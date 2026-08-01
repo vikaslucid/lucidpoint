@@ -12,6 +12,9 @@ public class LessonQuestionRequest {
     @NotBlank
     private String prompt;
 
+    // BEGINNER, INTERMEDIATE, or ADVANCED — defaults to BEGINNER if omitted (see LessonService).
+    private String difficulty;
+
     private List<String> options; // optional — omit/empty for a free-response question
 
     @NotBlank

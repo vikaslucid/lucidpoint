@@ -23,6 +23,7 @@ export default function Navbar() {
           <>
             <Link to="/ai/problem-solving">AI Hint</Link>
             <Link to="/ai/study-planner">Study Planner</Link>
+            <Link to="/activity">My Activity</Link>
             {(user.role === "ADMIN" || user.role === "TEACHER") && (
               <Link to="/resources/mine">My Resources</Link>
             )}

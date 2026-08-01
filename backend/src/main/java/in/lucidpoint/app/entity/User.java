@@ -53,6 +53,11 @@ public class User {
     @Builder.Default
     private SubscriptionTier subscriptionTier = SubscriptionTier.FREE;
 
+    // Running total of points earned from correct LessonQuestion attempts (see LessonAttempt).
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer points = 0;
+
     @Column(updatable = false)
     private LocalDateTime createdAt;
 

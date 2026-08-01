@@ -32,6 +32,11 @@ public class LessonQuestion {
     @Column(nullable = false)
     private Integer position; // display order within the lesson
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private QuestionDifficulty difficulty = QuestionDifficulty.BEGINNER;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String prompt;
 
